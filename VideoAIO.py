@@ -14,8 +14,28 @@ def directory_select(null):
     frame_calc(directory_selected + "/")
 
 
+def directory_select2(null):
+    directory_selected = filedialog.askdirectory()
+    resolution_calc(directory_selected + "/")
+
+
+def resolution_calc(directory):
+    filetypes = [".mp4", ".wmv", ".avi", ".mkv", ".flv"]
+    for filetype in filetypes:
+        for filename in os.listdir(directory):
+            if filename.endswith(filetype):
+                print(filename)
+                file = directory + str(filename)
+                with open(file, 'r') as f:
+                    clip = VideoFileClip(file)
+                    video_resolution = clip.size
+                    print("Resolution is : " + str(video_resolution))
+            else:
+                continue
+
+
 def frame_calc(directory):
-    filetypes = [".mp4", ".wmv", ".avi", ".mkv", ".flv", ]
+    filetypes = [".mp4", ".wmv", ".avi", ".mkv", ".flv"]
     for filetype in filetypes:
         for filename in os.listdir(directory):
             if filename.endswith(filetype):
@@ -98,9 +118,11 @@ def main():
     tab1 = ttk.Frame(tabs)
     tab2 = ttk.Frame(tabs)
     tab3 = ttk.Frame(tabs)
+    tab4 = ttk.Frame(tabs)
     tabs.add(tab1, text="Download youtube sub from channel")
     tabs.add(tab2, text="Text search")
     tabs.add(tab3, text="frame rate of all videos in directory")
+    tabs.add(tab4, text="Resolution of all videos in directory")
 
     label4 = Entry(tab1, width=60)
     label4.pack(side=TOP, padx=0, pady=10)
@@ -115,11 +137,15 @@ def main():
     submit_url.pack(side=TOP, padx=0, pady=10)
 
     empty = Entry(tab3, width=0)
+    empty2 = Entry(tab3, width=0)
 
     directory_select_v = Button(tab3, text="Select directory by clicking here", width=40, command=lambda: directory_select(empty.get()))
     directory_select_v.pack(side=TOP, padx=0, pady=10)
 
-    root.geometry("800x480")
+    directory_select_v_2 = Button(tab4, text="Select directory by clicking here", width=40, command=lambda: directory_select2(empty.get()))
+    directory_select_v_2.pack(side=TOP, padx=0, pady=10)
+
+    root.geometry("1000x480")
     root.mainloop()
 
 
