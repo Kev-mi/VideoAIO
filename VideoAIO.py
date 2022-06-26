@@ -15,8 +15,8 @@ def directory_select(null):
 
 
 def directory_select2(null):
-    directory_selected = filedialog.askdirectory()
-    threading.Thread(target=resolution_calc, args=(directory_selected + "/",)).start()
+    directory_selected2 = filedialog.askdirectory()
+    threading.Thread(target=resolution_calc, args=(directory_selected2 + "/",)).start()
 
 
 def resolution_calc(directory):
@@ -81,6 +81,11 @@ def valueGET(val1):
     folder_selected = filedialog.askdirectory()
     threading.Thread(target=channel_sub_download, args=(val1,)).start()
 
+def valueGET_2(val1):
+    global folder_selected_2
+    folder_selected_2 = filedialog.askdirectory()
+    threading.Thread(target=channel_sub_download_2, args=(val1,)).start()
+
 
 def txt_saver(filename, string_save):
     remove_list = ["{'text':", "[", "]", "}"]
@@ -88,6 +93,14 @@ def txt_saver(filename, string_save):
         string_save = string_save.replace(x, "")
     string_save = string_save.replace(",", ",\n")
     with open(os.path.join(folder_selected, " %s.txt" % filename), 'w+') as f:
+        f.write(string_save)
+
+def txt_saver_2(filename, string_save):
+    remove_list = ["{'text':", "[", "]", "}"]
+    for x in remove_list:
+        string_save = string_save.replace(x, "")
+    string_save = string_save.replace(",", ",\n")
+    with open(os.path.join(folder_selected_2, " %s.txt" % filename), 'w+') as f:
         f.write(string_save)
 
 
@@ -114,6 +127,22 @@ def channel_sub_download(channel_url):
             pass
 
 
+def channel_sub_download_2(channel_url):
+    url_list = []
+    url_list = video_url_extractor(channel_url, url_list)
+    for url in url_list:
+        try:
+            video_sub = YouTubeTranscriptApi.get_transcript(url[32:43])
+            video_title = YouTube(url)
+            video_title = video_title.title
+            special_char = ["#", "%", "&", "{", "}", "\\", "<", ">", "*", "?", "/", "$", "!", "'", '"', ":", "@", "+", "`", "|", "="]
+            for char in special_char:
+                video_title = video_title.replace(char, "")
+            txt_saver_2(video_title, str(video_sub))
+        except:
+            pass
+
+
 def main():
     tab1 = ttk.Frame(tabs)
     tab2 = ttk.Frame(tabs)
@@ -127,6 +156,7 @@ def main():
     label4 = Entry(tab1, width=60)
     label4.pack(side=TOP, padx=0, pady=10)
 
+
     string_s = Entry(tab2, width=60)
     string_s.pack(side=TOP, padx=0, pady=10)
 
@@ -134,7 +164,13 @@ def main():
     string_s_b.pack(side=TOP, padx=0, pady=10)
 
     submit_url = Button(tab1, text="Enter Channel url above and click here", width=40, command=lambda: valueGET(label4.get()))
-    submit_url.pack(side=TOP, padx=0, pady=10)
+    submit_url.pack(side=TOP, padx=0, pady=20)
+
+    label5 = Entry(tab1, width=60)
+    label5.pack(side=TOP, padx=0, pady=10)
+
+    submit_url_2 = Button(tab1, text="Enter Channel url above and click here", width=40, command=lambda: valueGET_2(label5.get()))
+    submit_url_2.pack(side=TOP, padx=0, pady=20)
 
     empty = Entry(tab3, width=0)
     empty2 = Entry(tab3, width=0)
