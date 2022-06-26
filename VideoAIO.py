@@ -7,16 +7,16 @@ import os.path
 import os
 from youtube_transcript_api import YouTubeTranscriptApi
 from moviepy.editor import *
-
+import threading
 
 def directory_select(null):
     directory_selected = filedialog.askdirectory()
-    frame_calc(directory_selected + "/")
+    threading.Thread(target=frame_calc, args=(directory_selected + "/",)).start()
 
 
 def directory_select2(null):
     directory_selected = filedialog.askdirectory()
-    resolution_calc(directory_selected + "/")
+    threading.Thread(target=resolution_calc, args=(directory_selected + "/",)).start()
 
 
 def resolution_calc(directory):
@@ -73,13 +73,13 @@ def string_search(string):
 def string_value(string_s):
     global folder_selected_s
     folder_selected_s = filedialog.askdirectory()
-    string_search(string_s)
+    threading.Thread(target=string_search, args=(string_s,)).start()
 
 
 def valueGET(val1):
     global folder_selected
     folder_selected = filedialog.askdirectory()
-    channel_sub_download(val1)
+    threading.Thread(target=channel_sub_download, args=(val1,)).start()
 
 
 def txt_saver(filename, string_save):
