@@ -61,7 +61,7 @@ def string_search(string):
             txt_file = open(folder_selected_s + "/" + str(filename), "r")
             for line in txt_file:
                 if string in line:
-                    print(str(txt_file)[80:-29])
+                    print(str(txt_file)[len(os.getcwd())+51:-29])
                     print(line)
                     try:
                         timestamp = convert(float((next(txt_file))[9:-2]))
